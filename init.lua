@@ -5,3 +5,7 @@ require("config.lazy")
 require("config.commands")
 -- add mouse context entries
 require("config.mouse_context_menu")
+
+vim.diagnostic.config({
+  float = { border = "rounded" },
+})
