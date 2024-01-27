@@ -30,6 +30,7 @@ end
 map_multiple({
   -- additonal goto keymaps
   { "n", "gh", "<cmd>lua vim.lsp.buf.hover()<cr>", "LSP Hover" },
+  { "t", "<Esc>", "<C-\\><C-n>" },
 })
 
 local wk = require("which-key")
@@ -38,6 +39,9 @@ wk.register({
   o = {
     name = "open",
     a = { "<cmd>Alpha<CR>", "Open Alpha" },
+    t = { "<cmd>ToggleTerm size=20 direction=horizontal<cr>", "Horizontal terminal" },
+    f = { "<cmd>ToggleTerm size=20 direction=float<cr>", "Floating terminal" },
+    v = { "<cmd>ToggleTerm size=90 direction=vertical<cr>", "Vertical terminal" },
   },
   x = {
     d = { "<cmd>Telescope diagnostics<CR>", "Document Diagnostics" },
