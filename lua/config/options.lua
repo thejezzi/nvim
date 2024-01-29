@@ -6,6 +6,7 @@ local opt = vim.opt
 
 opt.colorcolumn = "80,100"
 opt.relativenumber = false -- Relative line numbers
+opt.scrolloff = 10
 
 local g = vim.g
 
