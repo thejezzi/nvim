@@ -1,3 +1,7 @@
 return {
-  { "zbirenbaum/copilot.lua", enabled = false },
+  {
+    "zbirenbaum/copilot.lua",
+    cmd = "Copilot",
+    enabled = true,
+  },
 }
