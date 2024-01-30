@@ -1,7 +1,9 @@
 return {
   {
     "neovim/nvim-lspconfig",
+    ---@class PluginLspOpts
     opts = {
+      ---@type lspconfig.options
       servers = {
         gopls = {
           keys = {
@@ -42,6 +44,22 @@ return {
               staticcheck = true,
               directoryFilters = { "-.git", "-.vscode", "-.idea", "-.vscode-test", "-node_modules" },
               semanticTokens = true,
+            },
+            rust_analyzer = {
+              setup = {
+                settings = {
+                  ["rust-analyzer"] = {
+                    procMacro = {
+                      ignored = {
+                        leptos_macro = {
+                          "component",
+                          "server",
+                        },
+                      },
+                    },
+                  },
+                },
+              },
             },
           },
         },
