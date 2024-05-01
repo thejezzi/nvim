@@ -48,4 +48,13 @@ wk.register({
     n = { "<cmd>lua vim.diagnostic.goto_next()<CR>", "Next Diagnostic" },
     N = { "<cmd>lua vim.diagnostic.goto_prev()<CR>", "Previous Diagnostic" },
   },
+  g = {
+    d = {
+      name = "Diffview",
+      d = { "<cmd>DiffviewOpen<CR>", "Open Diffview" },
+      c = { "<cmd>DiffviewClose<CR>", "Close Diffview" },
+      r = { "<cmd>DiffviewRefresh<CR>", "Refresh Diffview" },
+      h = { "<cmd>DiffviewFileHistory<CR>", "File History" },
+    },
+  },
 }, { prefix = "<leader>" })
