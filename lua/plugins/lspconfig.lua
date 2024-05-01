@@ -5,6 +5,22 @@ return {
     opts = {
       ---@type lspconfig.options
       servers = {
+        rust_analyzer = {
+          setup = {
+            settings = {
+              ["rust-analyzer"] = {
+                procMacro = {
+                  ignored = {
+                    leptos_macro = {
+                      "component",
+                      "server",
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
         gopls = {
           keys = {
             -- Workaround for the lack of a DAP strategy in neotest-go: https://github.com/nvim-neotest/neotest-go/issues/12
@@ -44,22 +60,6 @@ return {
               staticcheck = true,
               directoryFilters = { "-.git", "-.vscode", "-.idea", "-.vscode-test", "-node_modules" },
               semanticTokens = true,
-            },
-            rust_analyzer = {
-              setup = {
-                settings = {
-                  ["rust-analyzer"] = {
-                    procMacro = {
-                      ignored = {
-                        leptos_macro = {
-                          "component",
-                          "server",
-                        },
-                      },
-                    },
-                  },
-                },
-              },
             },
           },
         },
