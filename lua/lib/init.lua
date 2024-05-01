@@ -1,5 +1,7 @@
 local M = {}
 
+local notify = require("notify")
+
 M.change_filetype_window = function()
   local actions = require("telescope.actions")
   local actions_state = require("telescope.actions.state")
@@ -13,7 +15,7 @@ M.change_filetype_window = function()
 
     vim.cmd("setfiletype " .. selected[1])
 
-    local lsp = vim.lsp.buf_get_clients()
+    local lsp = vim.lsp.get_active_clients()
     if next(lsp) == nil then
       return
     end
@@ -27,7 +29,7 @@ M.change_filetype_window = function()
     finder = finders.new_table(filetypes_list),
     sorter = sorters.get_generic_fuzzy_sorter({}),
 
-    attach_mappings = function(prompt_bufnr, map)
+    attach_mappings = function(_, map)
       map("i", "<CR>", enter)
       return true
     end,
@@ -46,9 +48,13 @@ function M.toggle_buffer_semantic_tokens(bufnr)
   for _, client in ipairs(vim.lsp.get_active_clients({ bufnr = bufnr })) do
     if client.server_capabilities.semanticTokensProvider then
       vim.lsp.semantic_tokens[vim.b[bufnr].semantic_tokens_enabled and "start" or "stop"](bufnr, client.id)
-      utils.notify(string.format("Buffer lsp semantic highlighting %s", bool2str(vim.b[bufnr].semantic_tokens_enabled)))
+      notify(string.format("Buffer lsp semantic highlighting %s" + bool2str(vim.b[bufnr].semantic_tokens_enabled)))
     end
   end
+end
+
+function bool2str(bool)
+  return bool and "enabled" or "disabled"
 end
 
 return M
