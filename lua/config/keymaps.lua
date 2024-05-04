@@ -31,6 +31,13 @@ map_multiple({
   -- additonal goto keymaps
   { "n", "gh", "<cmd>lua vim.lsp.buf.hover()<cr>", "LSP Hover" },
   { "t", "<Esc>", "<C-\\><C-n>" },
+  { "n", "<leader>zg", "<cmd>Gen<CR>" },
+  { "n", "<leader>zc", "<cmd>Gen Chat<CR>" },
+  { "v", "<leader>za", ":'<,'>Gen Ask<CR>" },
+  { "v", "<leader>zh", ":'<,'>Gen Change<CR>" },
+  { "v", "<leader>ze", ":'<,'>Gen Enhance_Grammar_Spelling<CR>" },
+  { "v", "<leader>zr", ":'<,'>Gen Review_Code<CR>" },
+  { "v", "<leader>zs", ":'<,'>Gen Summarize<CR>" },
 })
 
 local wk = require("which-key")
@@ -56,5 +63,9 @@ wk.register({
       r = { "<cmd>DiffviewRefresh<CR>", "Refresh Diffview" },
       h = { "<cmd>DiffviewFileHistory<CR>", "File History" },
     },
+  },
+  z = {
+    name = "Ollama",
+    -- e = { "<cmd>Gen Enhance_Grammar_Spelling<CR>", "Enhance Grammar Spelling" },
   },
 }, { prefix = "<leader>" })
