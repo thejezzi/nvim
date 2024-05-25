@@ -1,7 +1,21 @@
 return {
   "hrsh7th/nvim-cmp",
+  dependencies = {
+    "hrsh7th/cmp-emoji",
+    "hrsh7th/cmp-calc",
+    "https://codeberg.org/FelipeLema/cmp-async-path",
+    "chrisgrieser/cmp-nerdfont",
+  },
   ---@param opts cmp.ConfigSchema
   opts = function(_, opts)
+    -- add some cmp sources that are quite useful
+    table.insert(opts.sources, { name = "emoji" })
+    table.insert(opts.sources, { name = "calc" })
+    table.insert(opts.sources, { name = "async_path" })
+    table.insert(opts.sources, { name = "nerdfont" })
+
+    -- prevent the cmp windows (dropdown and documentation) from becoming to big
+    -- or too small when using splits or a small screen size
     opts.formatting.format = function(_, item)
       local icons = require("lazyvim.config").icons.kinds
       if icons[item.kind] then
