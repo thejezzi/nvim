@@ -62,6 +62,7 @@ return {
           },
         },
       },
+      ---@type table<string, fun(server:string, opts:_.lspconfig.options):boolean?>
       setup = {
         gopls = function(_, opts)
           -- workaround for gopls not supporting semanticTokensProvider
@@ -82,6 +83,11 @@ return {
             end
           end)
           -- end workaround
+        end,
+
+        -- disable clangd on proto files as we need bufls to handle protobuf files
+        clangd = function(_, opts)
+          opts.filetypes = { "c", "cpp", "objc", "objcpp", "cuda" }
         end,
       },
     },
