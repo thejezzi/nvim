@@ -84,4 +84,14 @@ wk.register({
     r = { mode = "v", ":'<,'>Gen Review_Code<CR>", "review code" },
     s = { mode = "v", ":'<,'>Gen Summarize<CR>", "summarize" },
   },
+  D = {
+    name = "Dadbod",
+    mode = { "n" },
+    d = { "<cmd>DBUIToggle<CR>", "Toggle DBUI" },
+    a = { "<cmd>DBUIAddConnection<CR>", "Add DB Connection" },
+    h = { "<cmd>DBUIHideNotifications<CR>", "Hide Notifications" },
+    f = { "<cmd>DBUIFindBuffer<CR>", "Find Buffer" },
+    r = { "<cmd>DBUIRenameBuffer<CR>", "Rename Buffer" },
+    l = { "<cmd>DBUILastQueryInfo<CR>", "Last Query Info" },
+  },
 }, { prefix = "<leader>" })
