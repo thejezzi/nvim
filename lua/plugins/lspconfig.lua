@@ -5,20 +5,22 @@ return {
     opts = {
       ---@type lspconfig.options
       servers = {
-        rust_analyzer = {
-          settings = {
-            ["rust-analyzer"] = {
-              procMacro = {
-                ignored = {
-                  leptos_macro = {
-                    "component",
-                    "server",
-                  },
-                },
-              },
-            },
-          },
-        },
+        -- NOTE: We comment this because it would trigger mason to install
+        -- the rust_analyzer which is already done by rustacean.nvim
+        -- rust_analyzer = {
+        --   settings = {
+        --     ["rust-analyzer"] = {
+        --       procMacro = {
+        --         ignored = {
+        --           leptos_macro = {
+        --             "component",
+        --             "server",
+        --           },
+        --         },
+        --       },
+        --     },
+        --   },
+        -- },
         gopls = {
           keys = {
             -- Workaround for the lack of a DAP strategy in neotest-go: https://github.com/nvim-neotest/neotest-go/issues/12
