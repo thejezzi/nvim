@@ -39,6 +39,17 @@ return {
           end,
         },
       }
+
+      -- nvim-navic integration which is an additon to lualine which uses
+      -- treesitter to display where you at
+      table.insert(opts.sections.lualine_c, {
+        function()
+          return require("nvim-navic").get_location()
+        end,
+        cond = function()
+          return package.loaded["nvim-navic"] and require("nvim-navic").is_available()
+        end,
+      })
     end,
   },
 }
