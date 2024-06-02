@@ -13,6 +13,7 @@ return {
     table.insert(opts.sources, { name = "calc" })
     table.insert(opts.sources, { name = "async_path" })
     table.insert(opts.sources, { name = "nerdfont" })
+    table.insert(opts.sources, { name = "vim-dadbod-completion" })
 
     -- prevent the cmp windows (dropdown and documentation) from becoming to big
     -- or too small when using splits or a small screen size
