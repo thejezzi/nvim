@@ -108,6 +108,16 @@ return {
     "rebelot/kanagawa.nvim",
   },
 
+  { "catppuccin/nvim", name = "catppuccin", priority = 1000 },
+
+  { "sainnhe/everforest", priority = 1000 },
+
+  {
+    "scottmckendry/cyberdream.nvim",
+    lazy = false,
+    priority = 1000,
+  },
+
   -- Configure LazyVim to load the theme
   {
     "LazyVim/LazyVim",
