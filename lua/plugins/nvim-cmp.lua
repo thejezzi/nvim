@@ -5,7 +5,7 @@ return {
     "hrsh7th/cmp-calc",
     "https://codeberg.org/FelipeLema/cmp-async-path",
     "chrisgrieser/cmp-nerdfont",
-    -- "kristijanhusak/vim-dadbod-completion",
+    "kristijanhusak/vim-dadbod-completion",
   },
   ---@param opts cmp.ConfigSchema
   opts = function(_, opts)
