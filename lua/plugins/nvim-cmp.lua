@@ -5,7 +5,7 @@ return {
     "hrsh7th/cmp-calc",
     "https://codeberg.org/FelipeLema/cmp-async-path",
     "chrisgrieser/cmp-nerdfont",
-    "kristijanhusak/vim-dadbod-completion",
+    -- "kristijanhusak/vim-dadbod-completion",
   },
   ---@param opts cmp.ConfigSchema
   opts = function(_, opts)
@@ -14,7 +14,7 @@ return {
     table.insert(opts.sources, { name = "calc" })
     table.insert(opts.sources, { name = "async_path" })
     table.insert(opts.sources, { name = "nerdfont" })
-    table.insert(opts.sources, { name = "vim-dadbod-completion" })
+    -- table.insert(opts.sources, { name = "vim-dadbod-completion" })
 
     -- prevent the cmp windows (dropdown and documentation) from becoming to big
     -- or too small when using splits or a small screen size
@@ -60,43 +60,42 @@ return {
 
     local cmp = require("cmp")
 
-    opts.mapping = vim.tbl_extend("force", opts.mapping, {
-      ["<Tab>"] = cmp.mapping(function(fallback)
-        if cmp.visible() then
-          cmp.select_next_item()
-          -- You could replace the expand_or_jumpable() calls with expand_or_locally_jumpable()
-          -- this way you will only jump inside the snippet region
-        elseif has_words_before() then
-          cmp.complete()
-        else
-          fallback()
-        end
-      end, { "i", "s" }),
-      ["<S-Tab>"] = cmp.mapping(function(fallback)
-        if cmp.visible() then
-          cmp.select_prev_item()
-        else
-          fallback()
-        end
-      end, { "i", "s" }),
-    })
+    -- opts.mapping = vim.tbl_extend("force", opts.mapping, {
+    --   ["<Tab>"] = cmp.mapping(function(fallback)
+    --     if cmp.visible() then
+    --       cmp.select_next_item()
+    --       -- You could replace the expand_or_jumpable() calls with expand_or_locally_jumpable()
+    --       -- this way you will only jump inside the snippet region
+    --     elseif has_words_before() then
+    --       cmp.complete()
+    --     else
+    --       fallback()
+    --     end
+    --   end, { "i", "s" }),
+    --   ["<S-Tab>"] = cmp.mapping(function(fallback)
+    --     if cmp.visible() then
+    --       cmp.select_prev_item()
+    --     else
+    --       fallback()
+    --     end
+    --   end, { "i", "s" }),
+    -- })
 
-    -- opts.completion = {
-    --   autocomplete = false,
-    -- }
+    opts.completion = {
+      -- autocomplete = false,
+      completeopt = "menu,menuone,noinsert",
+    }
     local cmp_window = require("cmp.config.window")
     opts.window = {
       completion = cmp_window.bordered(),
       documentation = cmp_window.bordered(),
     }
 
-    -- local cmp = require("cmp")
-    --
-    -- cmp.setup.filetype({ "sql" }, {
-    --   sources = {
-    --     { name = "vim-dadbod-completion" },
-    --     { name = "buffer" },
-    --   },
-    -- })
+    cmp.setup.filetype({ "sql" }, {
+      sources = {
+        { name = "vim-dadbod-completion" },
+        { name = "buffer" },
+      },
+    })
   end,
 }
