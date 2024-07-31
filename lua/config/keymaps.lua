@@ -57,7 +57,7 @@ require("which-key").add({
   { "<leader>Dh", "<cmd>DBUIHideNotifications<CR>", desc = "Hide Notifications" },
   { "<leader>Dl", "<cmd>DBUILastQueryInfo<CR>", desc = "Last Query Info" },
   { "<leader>Dr", "<cmd>DBUIRenameBuffer<CR>", desc = "Rename Buffer" },
-  { "<leader>gd", group = "Diffview" },
+  { "<leader>gd", group = "Diffview", icon = "󱩾" },
   { "<leader>gdc", "<cmd>DiffviewClose<CR>", desc = "Close Diffview" },
   { "<leader>gdd", "<cmd>DiffviewOpen<CR>", desc = "Open Diffview" },
   { "<leader>gh", "<cmd>DiffviewFileHistory<CR>", desc = "File History" },
