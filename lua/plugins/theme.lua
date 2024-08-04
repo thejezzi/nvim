@@ -10,6 +10,10 @@ return {
     -- },
   },
 
+  {
+    "Shatur/neovim-ayu",
+  },
+
   --  astrotheme [theme]
   --  https://github.com/AstroNvim/astrotheme
   {
