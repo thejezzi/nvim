@@ -26,6 +26,11 @@ return {
             command = "clippy",
             extraArgs = { "--no-deps" },
           },
+          diagnostics = {
+            disabled = {
+              "non_snake_case",
+            },
+          },
           procMacro = {
             enable = true,
             ignored = {
@@ -33,7 +38,7 @@ return {
               ["napi-derive"] = { "napi" },
               ["async-recursion"] = { "async_recursion" },
               leptos_macro = {
-                "component",
+                -- "component",
                 "server",
               },
             },
