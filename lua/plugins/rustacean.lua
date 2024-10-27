@@ -39,7 +39,7 @@ return {
               ["async-recursion"] = { "async_recursion" },
               leptos_macro = {
                 -- "component",
-                "server",
+                -- "server",
               },
             },
           },
