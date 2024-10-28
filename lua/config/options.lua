@@ -7,6 +7,8 @@ local opt = vim.opt
 opt.colorcolumn = "80,100"
 -- opt.relativenumber = false -- Relative line numbers
 opt.scrolloff = 10
+opt.textwidth = 100
+opt.formatoptions:append("t")
 
 local g = vim.g
 
