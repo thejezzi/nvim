@@ -3,7 +3,9 @@ return {
     "neovim/nvim-lspconfig",
     ---@class PluginLspOpts
     opts = {
-      ---@type lspconfig.options
+      inlay_hints = {
+        enabled = false,
+      },
       servers = {
         -- NOTE: We comment this because it would trigger mason to install
         -- the rust_analyzer which is already done by rustacean.nvim
@@ -30,7 +32,7 @@ return {
             gopls = {
               gofumpt = true,
               codelenses = {
-                gc_details = false,
+                gc_details = true,
                 generate = true,
                 regenerate_cgo = true,
                 run_govulncheck = true,
