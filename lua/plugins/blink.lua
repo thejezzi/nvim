@@ -5,6 +5,22 @@ return {
     "saghen/blink.compat",
   },
   opts = {
+    completion = {
+      -- menu = {
+      --   draw = {
+      --     columns = {
+      --       { "label", "label_description", gap = 1 },
+      --       { "kind_icon", "kind" },
+      --     },
+      --   },
+      -- },
+    },
+    keymap = {
+      ["<CR>"] = { "accept", "fallback" },
+
+      ["<Tab>"] = { "snippet_forward", "fallback" },
+      ["<S-Tab>"] = { "snippet_backward", "fallback" },
+    },
     sources = {
       default = { "emoji", "lazydev" },
       providers = {
