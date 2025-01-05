@@ -1,8 +1,10 @@
 return {
   "saghen/blink.cmp",
   dependencies = {
-    "allaman/emoji.nvim",
     "saghen/blink.compat",
+    "allaman/emoji.nvim",
+    "hrsh7th/cmp-calc",
+    "chrisgrieser/cmp-nerdfont",
   },
   opts = {
     completion = {
@@ -22,8 +24,16 @@ return {
       ["<S-Tab>"] = { "snippet_backward", "fallback" },
     },
     sources = {
-      default = { "emoji", "lazydev" },
+      default = { "emoji", "lazydev", "calc", "path", "nerdfont" },
       providers = {
+        nerdfont = {
+          name = "nerdfont",
+          module = "blink.compat.source",
+        },
+        calc = {
+          name = "calc",
+          module = "blink.compat.source",
+        },
         emoji = {
           name = "emoji",
           module = "blink.compat.source",

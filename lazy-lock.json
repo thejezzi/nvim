@@ -10,6 +10,8 @@
   "catppuccin": { "branch": "main", "commit": "f67b886d65a029f12ffa298701fb8f1efd89295d" },
   "clangd_extensions.nvim": { "branch": "main", "commit": "8f7b72100883e0e34400d9518d40a03f21e4d0a6" },
   "cmake-tools.nvim": { "branch": "master", "commit": "4e134ed5532e5fc3c0331d1b38b7acaa4bb31894" },
+  "cmp-calc": { "branch": "main", "commit": "5947b412da67306c5b68698a02a846760059be2e" },
+  "cmp-nerdfont": { "branch": "main", "commit": "e97482344ebed29093015a18c155057adf5c842b" },
   "conform.nvim": { "branch": "master", "commit": "70019124aa4f2e6838be9fbd2007f6d13b27a96d" },
   "conway.nvim": { "branch": "main", "commit": "116f84bc4bc14d91faedbde7db941a153ffb2ab5" },
   "copilot.lua": { "branch": "master", "commit": "886ee73b6d464b2b3e3e6a7ff55ce87feac423a9" },
