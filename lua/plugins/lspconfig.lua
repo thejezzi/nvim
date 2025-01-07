@@ -93,6 +93,9 @@ return {
         clangd = function(_, opts)
           opts.filetypes = { "c", "cpp", "objc", "objcpp", "cuda" }
         end,
+        groovyls = function(_, opts)
+          opts.filetypes = { "groovy", "jenkinsfile" }
+        end,
       },
     },
   },
