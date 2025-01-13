@@ -1,7 +1,7 @@
 return {
   "David-Kunz/gen.nvim",
   opts = {
-    model = "gemma2",
+    model = "llama3.1",
     display_mode = "split",
     show_prompt = "true",
     show_model = "true",
