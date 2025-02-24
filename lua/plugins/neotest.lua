@@ -5,6 +5,7 @@ return {
       "nvim-neotest/nvim-nio",
       "nvim-lua/plenary.nvim",
       "alfaix/neotest-gtest",
+      "rouge8/neotest-rust",
     },
     opts = function(_, opts)
       local wk = require("which-key")
@@ -22,6 +23,7 @@ return {
         })
       end
 
+      table.insert(opts.adapters, "neotest-rust")
       table.insert(opts.adapters, "neotest-gtest")
       opts.adapters["neotest-golang"] = {
         go_test_args = {

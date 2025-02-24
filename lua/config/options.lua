@@ -10,6 +10,8 @@ opt.scrolloff = 10
 opt.textwidth = 100
 opt.formatoptions:append("t")
 
+opt.exrc = true
+
 local g = vim.g
 
-g.semantic_tokens_enabled = true
+g.semantic_tokens_enabled = false
