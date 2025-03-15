@@ -24,7 +24,7 @@ return {
       ["<S-Tab>"] = { "snippet_backward", "fallback" },
     },
     sources = {
-      default = { "emoji", "lazydev", "calc", "path", "nerdfont" },
+      default = { "emoji", "lazydev", "calc", "path", "snippets" }, -- , "nerdfont" },
       providers = {
         nerdfont = {
           name = "nerdfont",
