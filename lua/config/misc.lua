@@ -2,8 +2,8 @@ vim.diagnostic.config({
   float = { border = "rounded" },
 })
 
--- disable copilot by default
-vim.cmd("Copilot disable")
+-- -- disable copilot by default
+-- vim.cmd("Copilot disable")
 
 vim.filetype.add({
   pattern = {

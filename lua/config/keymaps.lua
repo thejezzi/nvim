@@ -50,6 +50,7 @@ map_multiple({
 })
 
 require("which-key").add({
+  -- Dadbod keymaps
   { "<leader>D", group = "Dadbod", icon = "" },
   { "<leader>Da", "<cmd>DBUIAddConnection<CR>", desc = "Add DB Connection" },
   { "<leader>Dd", "<cmd>DBUIToggle<CR>", desc = "Toggle DBUI" },
@@ -57,16 +58,22 @@ require("which-key").add({
   { "<leader>Dh", "<cmd>DBUIHideNotifications<CR>", desc = "Hide Notifications" },
   { "<leader>Dl", "<cmd>DBUILastQueryInfo<CR>", desc = "Last Query Info" },
   { "<leader>Dr", "<cmd>DBUIRenameBuffer<CR>", desc = "Rename Buffer" },
+  --
+  -- Diffview
   { "<leader>gd", group = "Diffview", icon = "󱩾" },
   { "<leader>gdc", "<cmd>DiffviewClose<CR>", desc = "Close Diffview" },
   { "<leader>gdd", "<cmd>DiffviewOpen<CR>", desc = "Open Diffview" },
   { "<leader>gh", "<cmd>DiffviewFileHistory<CR>", desc = "File History" },
   { "<leader>gr", "<cmd>DiffviewRefresh<CR>", desc = "Refresh Diffview" },
+  --
+  -- Everyhting to open stuff
   { "<leader>o", group = "open", icon = "󰏌" },
   { "<leader>oa", "<cmd>Alpha<CR>", desc = "Open Alpha", icon = "󰧨" },
   { "<leader>of", "<cmd>ToggleTerm size=20 direction=float<cr>", desc = "Floating terminal" },
   { "<leader>ot", "<cmd>ToggleTerm size=20 direction=horizontal<cr>", desc = "Horizontal terminal" },
   { "<leader>ov", "<cmd>ToggleTerm size=90 direction=vertical<cr>", desc = "Vertical terminal" },
+  --
+  -- Preview extension similar to lsp saga priview
   { "<leader>p", group = "Preview", icon = "" },
   { "<leader>pp", "<cmd>lua require('goto-preview').goto_preview_definition()<CR>", desc = "Preview Definition" },
   { "<leader>pD", "<cmd>lua require('goto-preview').goto_preview_declaration()<CR>", desc = "Preview Declaration" },
@@ -82,9 +89,13 @@ require("which-key").add({
     desc = "Preview Implementation",
   },
   { "<leader>pP", "<cmd>lua require('goto-preview').close_all_win()<CR>", desc = "Close All Windows" },
+  --
+  -- Diagnostics
   { "<leader>xN", "<cmd>lua vim.diagnostic.goto_prev()<CR>", desc = "Previous Diagnostic" },
   { "<leader>xd", "<cmd>Telescope diagnostics<CR>", desc = "Document Diagnostics" },
   { "<leader>xn", "<cmd>lua vim.diagnostic.goto_next()<CR>", desc = "Next Diagnostic" },
+  --
+  -- Gen.nvim
   { "<leader>zc", "<cmd>Gen Chat<CR>", desc = "chat" },
   { "<leader>zg", "<cmd>Gen<CR>", desc = "gen" },
   { "<leader>z", group = "ollama", mode = { "n", "v" }, icon = "󱄔" },
@@ -95,5 +106,10 @@ require("which-key").add({
     { "<leader>zh", ":'<,'>Gen Change<CR>", desc = "change selected text" },
     { "<leader>zr", ":'<,'>Gen Review_Code<CR>", desc = "review code" },
     { "<leader>zs", ":'<,'>Gen Summarize<CR>", desc = "summarize" },
+  },
+  {
+    mode = { "n" },
+    { "<leader>F", group = "features", mode = { "n" }, icon = "󱁕" },
+    { "<leader>Fc", ":Copilot toggle<CR>", desc = "toggle copilot on or off" },
   },
 }, { prefix = "<leader>" })

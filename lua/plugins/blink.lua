@@ -24,7 +24,10 @@ return {
       ["<S-Tab>"] = { "snippet_backward", "fallback" },
     },
     sources = {
-      default = { "emoji", "lazydev", "calc", "path", "snippets" }, -- , "nerdfont" },
+      default = { "emoji", "lazydev", "calc", "path", "snippets", "nerdfont" },
+      per_filetype = {
+        codecompanion = { "codecompanion" },
+      },
       providers = {
         nerdfont = {
           name = "nerdfont",
