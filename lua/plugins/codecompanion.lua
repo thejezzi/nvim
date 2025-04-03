@@ -1,3 +1,13 @@
+local wk = require("which-key")
+
+wk.add({
+  { "<leader>ia", "<Cmd>CodeCompanionActions<CR>", desc = "Open action palette" },
+  { "<leader>id", "<Cmd>CodeCompanionCmd<CR>", desc = "Generate command" },
+  { "<leader>ij", "<Cmd>CodeCompanion<CR>", desc = "Inline assistant" },
+  { "<leader>ii", "<Cmd>CodeCompanionChat Toggle<CR>", desc = "Toggle chat buffer" },
+  { "<leader>ia", "<Cmd>CodeCompanionChat Add<CR>", desc = "Add to chat buffer", mode = "v" },
+})
+
 return {
   "olimorris/codecompanion.nvim",
   config = true,
@@ -19,16 +29,28 @@ return {
           },
         })
       end,
+      gemini = function()
+        return require("codecompanion.adapters").extend("gemini", {
+          env = {
+            api_key = "cmd: gpg --batch --quiet --decrypt ~/k.txt.gpg",
+          },
+          schema = {
+            model = {
+              default = "gemini-2.0-flash",
+            },
+          },
+        })
+      end,
     },
     strategies = {
       chat = {
-        adapter = "copilot",
+        adapter = "ollama",
       },
       inline = {
-        adapter = "copilot",
+        adapter = "ollama",
       },
       cmd = {
-        adapter = "copilot",
+        adapter = "ollama",
       },
     },
   },
