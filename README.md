@@ -32,3 +32,11 @@ try to specify the `TERM` environment variable.
 ```sh
 docker run -it --rm -e TERM="$TERM" thejezzi/nvim
 ```
+
+## Using CodeCompanion with MCPHub
+
+Make sure to have `uv` installed. This can be done by using the shell script
+from the official uv website or by installing via a package manager.
+
+Various tools from MCPHub will also be installed via pnpm (because node_modules
+are very large) which can be installed by running `npm i -g pnpm`

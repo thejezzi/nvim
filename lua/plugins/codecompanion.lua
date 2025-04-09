@@ -44,13 +44,22 @@ return {
     },
     strategies = {
       chat = {
-        adapter = "ollama",
+        adapter = "gemini",
+        tools = {
+          ["mcp"] = {
+            -- Prevent mcphub from loading before needed
+            callback = function()
+              return require("mcphub.extensions.codecompanion")
+            end,
+            description = "Call tools and resources from the MCP Servers",
+          },
+        },
       },
       inline = {
-        adapter = "ollama",
+        adapter = "gemini",
       },
       cmd = {
-        adapter = "ollama",
+        adapter = "gemini",
       },
     },
   },
