@@ -2,7 +2,7 @@ local wk = require("which-key")
 
 wk.add({
   { "<leader>ia", "<Cmd>CodeCompanionActions<CR>", desc = "Open action palette" },
-  { "<leader>id", "<Cmd>CodeCompanionCmd<CR>", desc = "Generate command" },
+  { "<leader>id", "<Cmd>CodeCompanionCmd<CR>", desc = "Generate command", mode = { "n", "v" } },
   { "<leader>ij", "<Cmd>CodeCompanion<CR>", desc = "Inline assistant" },
   { "<leader>ii", "<Cmd>CodeCompanionChat Toggle<CR>", desc = "Toggle chat buffer" },
   { "<leader>ia", "<Cmd>CodeCompanionChat Add<CR>", desc = "Add to chat buffer", mode = "v" },
