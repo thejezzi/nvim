@@ -1,3 +1,7 @@
+local lib = require("lib")
+
+lib.companion_notification:init()
+
 vim.diagnostic.config({
   float = { border = "rounded" },
 })

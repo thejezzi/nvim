@@ -1,4 +1,8 @@
+local companion_notification = require("lib.companion_notification")
+
 local M = {}
+
+M.companion_notification = companion_notification
 
 M.change_filetype_window = function()
   local actions = require("telescope.actions")
