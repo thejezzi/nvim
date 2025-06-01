@@ -1,4 +1,5 @@
 local wk = require("which-key")
+local VECTORCODE_ENABLED = false
 
 wk.add({
   { "<leader>ia", "<Cmd>CodeCompanionActions<CR>", desc = "Open action palette" },
@@ -28,6 +29,38 @@ local mcp_hub = {
   opts = {},
 }
 
+---Adds the content of all Git-tracked files to the chat buffer.
+---@param chat CodeCompanion.Chat The chat buffer to add the files to.
+local function git_files_callback(chat)
+  local handle = io.popen("git ls-files")
+  if handle then
+    local files = handle:read("*a")
+    handle:close()
+    if files == "" then
+      vim.notify("No git files found", vim.log.levels.INFO, { title = "CodeCompanion" })
+      return
+    end
+
+    -- Split by newlines
+    for file in files:gmatch("[^\r\n]+") do
+      -- Read each file content
+      local f = io.open(file, "r")
+      if f then
+        local content = f:read("*a")
+        f:close()
+        -- Add each file as a separate reference
+        chat:add_reference({
+          role = "user",
+          name = file,
+          content = content,
+        }, "git", file)
+      end
+    end
+  else
+    vim.notify("Failed to run git ls-files", vim.log.levels.ERROR, { title = "CodeCompanion" })
+  end
+end
+
 ---extensions builds the extensions table that need to be loaded as plugins in
 ---order to use them in codecompanion
 ---@return table
@@ -36,16 +69,16 @@ local function extensions()
   table.insert(resulting, 1, mcp_hub)
 
   if vim.fn.executable("vectorcode") == 1 then
+    VECTORCODE_ENABLED = true
     table.insert(resulting, 1, vector_code)
   end
 
   return resulting
 end
 
----Builds the plugin definition for codecompanion
----@return table plugin_def
-local function build_codecompanion()
-  local plugin_def = {
+return {
+  extensions(),
+  {
     "olimorris/codecompanion.nvim",
     config = true,
     dependencies = {
@@ -54,133 +87,116 @@ local function build_codecompanion()
       "nvim-lua/plenary.nvim",
       "nvim-treesitter/nvim-treesitter",
     },
-    opts = {
-      extensions = {
-        vectorcode = {
-          opts = {
-            add_tool = true,
-          },
-        },
-        history = {
-          enabled = true,
-          opts = {
-            -- Keymap to open history from chat buffer (default: gh)
-            keymap = "gh",
-            -- Keymap to save the current chat manually (when auto_save is disabled)
-            save_chat_keymap = "sc",
-            -- Save all chats by default (disable to save only manually using 'sc')
-            auto_save = true,
-            -- Number of days after which chats are automatically deleted (0 to disable)
-            expiration_days = 0,
-            -- Picker interface ("telescope" or "snacks" or "fzf-lua" or "default")
-            picker = "telescope",
-            ---Automatically generate titles for new chats
-            auto_generate_title = true,
-            title_generation_opts = {
-              ---Adapter for generating titles (defaults to active chat's adapter)
-              adapter = nil, -- e.g "copilot"
-              ---Model for generating titles (defaults to active chat's model)
-              model = nil, -- e.g "gpt-4o"
-            },
-            ---On exiting and entering neovim, loads the last chat on opening chat
-            continue_last_chat = false,
-            ---When chat is cleared with `gx` delete the chat from history
-            delete_on_clearing_chat = false,
-            ---Directory path to save the chats
-            dir_to_save = vim.fn.stdpath("data") .. "/codecompanion-history",
-            ---Enable detailed logging for history extension
-            enable_logging = false,
-          },
-        },
-        mcphub = {
-          callback = "mcphub.extensions.codecompanion",
-          opts = {
-            show_result_in_chat = true, -- Show mcp tool results in chat
-            make_vars = true, -- Convert resources to #variables
-            make_slash_commands = true, -- Add prompts as /slash commands
-          },
-        },
-      },
-      log_level = "DEBUG",
-      adapters = {
-        ollama = function()
-          return require("codecompanion.adapters").extend("ollama", {
-            schema = {
-              model = {
-                default = "phi4",
+    opts = function()
+      -- default opts table which includes the history extension and gemini adapters as well as the
+      -- mcp_hub def. The history extension ensures that chats that stopped working or are needed
+      -- later can still be reloaded into the chat buffer.
+      -- The MCP Protocol gives us the ability to let the llm do anything we want and the mcp hub is
+      -- a nice way to install mcp servers from the hub without doing the configuration ourselves.
+      local opts_table = {
+        extensions = {
+          history = {
+            enabled = true,
+            opts = {
+              -- Keymap to open history from chat buffer (default: gh)
+              keymap = "gh",
+              -- Keymap to save the current chat manually (when auto_save is disabled)
+              save_chat_keymap = "sc",
+              -- Save all chats by default (disable to save only manually using 'sc')
+              auto_save = true,
+              -- Number of days after which chats are automatically deleted (0 to disable)
+              expiration_days = 0,
+              -- Picker interface ("telescope" or "snacks" or "fzf-lua" or "default")
+              picker = "telescope",
+              ---Automatically generate titles for new chats
+              auto_generate_title = true,
+              title_generation_opts = {
+                ---Adapter for generating titles (defaults to active chat's adapter)
+                adapter = nil, -- e.g "copilot"
+                ---Model for generating titles (defaults to active chat's model)
+                model = nil, -- e.g "gpt-4o"
               },
-              num_ctx = {
-                default = 20000,
-              },
+              ---On exiting and entering neovim, loads the last chat on opening chat
+              continue_last_chat = false,
+              ---When chat is cleared with `gx` delete the chat from history
+              delete_on_clearing_chat = false,
+              ---Directory path to save the chats
+              dir_to_save = vim.fn.stdpath("data") .. "/codecompanion-history",
+              ---Enable detailed logging for history extension
+              enable_logging = false,
             },
-          })
-        end,
-        gemini = function()
-          return require("codecompanion.adapters").extend("gemini", {
-            env = {
-              api_key = "cmd: gpg --batch --quiet --decrypt ~/k.txt.gpg",
-            },
-            schema = {
-              model = {
-                default = "gemini-2.0-flash",
-              },
-            },
-          })
-        end,
-      },
-      strategies = {
-        chat = {
-          adapter = "gemini",
-          slash_commands = {
-            ["git_files"] = {
-              description = "Add content of all Git-tracked files",
-              callback = function(chat)
-                local handle = io.popen("git ls-files")
-                if handle then
-                  local files = handle:read("*a")
-                  handle:close()
-                  if files == "" then
-                    vim.notify("No git files found", vim.log.levels.INFO, { title = "CodeCompanion" })
-                    return
-                  end
-
-                  -- Split by newlines
-                  for file in files:gmatch("[^\r\n]+") do
-                    -- Read each file content
-                    local f = io.open(file, "r")
-                    if f then
-                      local content = f:read("*a")
-                      f:close()
-                      -- Add each file as a separate reference
-                      chat:add_reference({
-                        role = "user",
-                        name = file,
-                        content = content,
-                      }, "git", file)
-                    end
-                  end
-                else
-                  vim.notify("Failed to run git ls-files", vim.log.levels.ERROR, { title = "CodeCompanion" })
-                end
-              end,
-              opts = { contains_code = true },
+          },
+          mcphub = {
+            callback = "mcphub.extensions.codecompanion",
+            opts = {
+              show_result_in_chat = true, -- Show mcp tool results in chat
+              make_vars = true, -- Convert resources to #variables
+              make_slash_commands = true, -- Add prompts as /slash commands
             },
           },
         },
-        inline = {
-          adapter = "gemini",
+        log_level = "DEBUG",
+        adapters = {
+          ollama = function()
+            return require("codecompanion.adapters").extend("ollama", {
+              schema = {
+                model = {
+                  default = "phi4",
+                },
+                num_ctx = {
+                  default = 20000,
+                },
+              },
+            })
+          end,
+          gemini = function()
+            return require("codecompanion.adapters").extend("gemini", {
+              env = {
+                api_key = "cmd: gpg --batch --quiet --decrypt ~/k.txt.gpg",
+              },
+              schema = {
+                model = {
+                  default = "gemini-2.0-flash",
+                },
+              },
+            })
+          end,
         },
-        cmd = {
-          adapter = "gemini",
+        strategies = {
+          chat = {
+            adapter = "gemini",
+            -- custom git_files slash command adds all files tracked by git to the chat buffer and
+            -- is useful if the project is not really that big or the context is big enough.
+            slash_commands = {
+              ["git_files"] = {
+                description = "Add content of all Git-tracked files",
+                callback = git_files_callback,
+                opts = { contains_code = true },
+              },
+            },
+          },
+          inline = {
+            adapter = "gemini",
+          },
+          cmd = {
+            adapter = "gemini",
+          },
         },
-      },
-    },
-  }
+      }
 
-  return plugin_def
-end
+      local vectorcode_extension = {
+        opts = {
+          add_tool = true,
+        },
+      }
 
-return {
-  extensions(),
-  build_codecompanion(),
+      -- If the vectorcode extension and vectorcode is installed we can use it in the chat buffer as
+      -- well.
+      if VECTORCODE_ENABLED then
+        opts_table.extensions["vectorcode"] = vectorcode_extension
+      end
+
+      return opts_table
+    end,
+  },
 }
