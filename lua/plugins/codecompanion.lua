@@ -8,37 +8,48 @@ wk.add({
   { "<leader>ia", "<Cmd>CodeCompanionChat Add<CR>", desc = "Add to chat buffer", mode = "v" },
 })
 
-return {
-  {
-    "olimorris/codecompanion.nvim",
-    dependencies = {
-      --other plugins
-      "ravitemer/codecompanion-history.nvim",
-    },
-    opts = {},
+local vector_code = {
+  "Davidyz/VectorCode",
+  version = "*", -- optional, depending on whether you're on nightly or release
+  build = "pipx upgrade vectorcode", -- optional but recommended. This keeps your CLI up-to-date.
+  dependencies = { "nvim-lua/plenary.nvim" },
+}
+
+local mcp_hub = {
+  "ravitemer/mcphub.nvim",
+  dependencies = {
+    "nvim-lua/plenary.nvim", -- Required for Job and HTTP requests
   },
-  {
-    "Davidyz/VectorCode",
-    version = "*", -- optional, depending on whether you're on nightly or release
-    build = "pipx upgrade vectorcode", -- optional but recommended. This keeps your CLI up-to-date.
-    dependencies = { "nvim-lua/plenary.nvim" },
-  },
-  {
-    "ravitemer/mcphub.nvim",
-    dependencies = {
-      "nvim-lua/plenary.nvim", -- Required for Job and HTTP requests
-    },
-    -- comment the following line to ensure hub will be ready at the earliest
-    -- cmd = "MCPHub", -- lazy load by default
-    build = "npm install -g mcp-hub@latest", -- Installs required mcp-hub npm module
-    -- uncomment this if you don't want mcp-hub to be available globally or can't use -g
-    -- build = "bundled_build.lua",  -- Use this and set use_bundled_binary = true in opts  (see Advanced configuration)
-    opts = {},
-  },
-  {
+  -- comment the following line to ensure hub will be ready at the earliest
+  -- cmd = "MCPHub", -- lazy load by default
+  build = "npm install -g mcp-hub@latest", -- Installs required mcp-hub npm module
+  -- uncomment this if you don't want mcp-hub to be available globally or can't use -g
+  -- build = "bundled_build.lua",  -- Use this and set use_bundled_binary = true in opts  (see Advanced configuration)
+  opts = {},
+}
+
+---extensions builds the extensions table that need to be loaded as plugins in
+---order to use them in codecompanion
+---@return table
+local function extensions()
+  local resulting = {}
+  table.insert(resulting, 1, mcp_hub)
+
+  if vim.fn.executable("vectorcode") == 1 then
+    table.insert(resulting, 1, vector_code)
+  end
+
+  return resulting
+end
+
+---Builds the plugin definition for codecompanion
+---@return table plugin_def
+local function build_codecompanion()
+  local plugin_def = {
     "olimorris/codecompanion.nvim",
     config = true,
     dependencies = {
+      "ravitemer/codecompanion-history.nvim",
       "j-hui/fidget.nvim",
       "nvim-lua/plenary.nvim",
       "nvim-treesitter/nvim-treesitter",
@@ -164,5 +175,12 @@ return {
         },
       },
     },
-  },
+  }
+
+  return plugin_def
+end
+
+return {
+  extensions(),
+  build_codecompanion(),
 }
