@@ -112,4 +112,10 @@ require("which-key").add({
     { "<leader>F", group = "features", mode = { "n" }, icon = "󱁕" },
     { "<leader>Fc", ":Copilot toggle<CR>", desc = "toggle copilot on or off" },
   },
+  {
+    { "<leader>y", group = "NeovimCode" },
+    { "<leader>yy", ":lua<CR>", mode = "v" },
+    { "<leader>yy", "<cmd>source %<CR>", mode = "n" },
+    { "<leader>yl", ":.lua<CR>", mode = "n" },
+  },
 }, { prefix = "<leader>" })

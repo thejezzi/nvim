@@ -2,10 +2,11 @@ local wk = require("which-key")
 local VECTORCODE_ENABLED = false
 
 wk.add({
+  { "<leader>i", group = "CodeCompanion", icon = "󱢮" },
   { "<leader>ia", "<Cmd>CodeCompanionActions<CR>", desc = "Open action palette" },
   { "<leader>id", "<Cmd>CodeCompanionCmd<CR>", desc = "Generate command", mode = { "n", "v" } },
-  { "<leader>ij", "<Cmd>CodeCompanion<CR>", desc = "Inline assistant" },
-  { "<leader>ii", "<Cmd>CodeCompanionChat Toggle<CR>", desc = "Toggle chat buffer" },
+  { "<leader>ij", "<Cmd>CodeCompanion<CR>", desc = "Inline assistant", icon = "󱌿" },
+  { "<leader>ii", "<Cmd>CodeCompanionChat Toggle<CR>", desc = "Toggle chat buffer", icon = "󰨙" },
   { "<leader>ia", "<Cmd>CodeCompanionChat Add<CR>", desc = "Add to chat buffer", mode = "v" },
 })
 
