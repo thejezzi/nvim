@@ -4,7 +4,7 @@ local buildOpts = function()
   ---@type snacks.Config
   local default = {}
 
-  if vim.fn.executable("git-delta") then
+  if vim.fn.executable("delta") == 1 then
     default["lazygit"] = {
       config = {
         git = {

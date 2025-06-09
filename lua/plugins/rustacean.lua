@@ -1,3 +1,5 @@
+---@module "rustaceanvim"
+
 local pretty_printer_path = vim.fn.stdpath("config") .. "/pretty_printer.py"
 local function load_dap_configuration(type)
   -- default
@@ -40,6 +42,7 @@ end
 return {
   "mrcjkb/rustaceanvim",
   opts = function()
+    ---@type rustaceanvim.Opts
     return {
       server = {
         on_attach = function(_, bufnr)
