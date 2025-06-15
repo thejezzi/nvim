@@ -1,3 +1,5 @@
+---@module "codecompanion"
+
 local wk = require("which-key")
 local VECTORCODE_ENABLED = false
 
@@ -80,13 +82,17 @@ end
 return {
   extensions(),
   {
-    "olimorris/codecompanion.nvim",
+    --- TODO: This fork is just a temporary fix for tool calling with gemini and should be replaced
+    --- with the original repository once the PR #1628 is merged
+    "thejezzi/codecompanion.nvim",
+    branch = "gemini_fix",
     config = true,
     dependencies = {
       "ravitemer/codecompanion-history.nvim",
       "j-hui/fidget.nvim",
       "nvim-lua/plenary.nvim",
       "nvim-treesitter/nvim-treesitter",
+      "echasnovski/mini.diff",
     },
     opts = function()
       -- default opts table which includes the history extension and gemini adapters as well as the
@@ -153,11 +159,11 @@ return {
           gemini = function()
             return require("codecompanion.adapters").extend("gemini", {
               env = {
-                api_key = "cmd: gpg --batch --quiet --decrypt ~/k.txt.gpg",
+                api_key = "cmd: gpg --batch --quiet --decrypt ~/gemini.gpg",
               },
               schema = {
                 model = {
-                  default = "gemini-2.0-flash",
+                  default = "gemini-2.5-flash-preview-05-20",
                 },
               },
             })
