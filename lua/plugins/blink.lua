@@ -7,16 +7,16 @@ return {
     "chrisgrieser/cmp-nerdfont",
   },
   opts = {
-    completion = {
-      -- menu = {
-      --   draw = {
-      --     columns = {
-      --       { "label", "label_description", gap = 1 },
-      --       { "kind_icon", "kind" },
-      --     },
-      --   },
-      -- },
-    },
+    -- completion = {
+    --   menu = {
+    --     draw = {
+    --       columns = {
+    --         { "label", "label_description", gap = 1 },
+    --         { "kind_icon", "kind" },
+    --       },
+    --     },
+    --   },
+    -- },
     keymap = {
       ["<CR>"] = { "accept", "fallback" },
 
@@ -24,12 +24,13 @@ return {
       ["<S-Tab>"] = { "snippet_backward", "fallback" },
     },
     sources = {
-      default = { "emoji", "lazydev", "calc", "path", "snippets", "nerdfont" },
+      default = { "nerdfont", "emoji", "lazydev", "calc", "path", "snippets" },
       per_filetype = {
         codecompanion = { "codecompanion" },
       },
       providers = {
         nerdfont = {
+          score_offset = 10,
           name = "nerdfont",
           module = "blink.compat.source",
         },
@@ -38,6 +39,7 @@ return {
           module = "blink.compat.source",
         },
         emoji = {
+          score_offset = 100,
           name = "emoji",
           module = "blink.compat.source",
           -- overwrite kind of suggestion

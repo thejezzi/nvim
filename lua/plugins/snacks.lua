@@ -1,5 +1,4 @@
----@diagnostic disable: missing-fields
----@return snacks.Config
+---@type fun(): snacks.Config
 local buildOpts = function()
   ---@type snacks.Config
   local default = {}

@@ -84,8 +84,7 @@ return {
   {
     --- TODO: This fork is just a temporary fix for tool calling with gemini and should be replaced
     --- with the original repository once the PR #1628 is merged
-    "thejezzi/codecompanion.nvim",
-    branch = "gemini_fix",
+    "olimorris/codecompanion.nvim",
     config = true,
     dependencies = {
       "ravitemer/codecompanion-history.nvim",
@@ -171,7 +170,7 @@ return {
         },
         strategies = {
           chat = {
-            adapter = "gemini",
+            adapter = "copilot",
             -- custom git_files slash command adds all files tracked by git to the chat buffer and
             -- is useful if the project is not really that big or the context is big enough.
             slash_commands = {
@@ -183,10 +182,10 @@ return {
             },
           },
           inline = {
-            adapter = "gemini",
+            adapter = "copilot",
           },
           cmd = {
-            adapter = "gemini",
+            adapter = "copilot",
           },
         },
       }
