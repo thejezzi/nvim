@@ -170,6 +170,13 @@ return {
               },
             })
           end,
+          tavily = function()
+            return require("codecompanion.adapters").extend("tavily", {
+              env = {
+                api_key = "cmd: gpg --batch --quiet --decrypt ~/tavily.gpg",
+              },
+            })
+          end,
         },
         strategies = {
           chat = {
