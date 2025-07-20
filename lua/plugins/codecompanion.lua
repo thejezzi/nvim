@@ -94,6 +94,9 @@ return {
       "echasnovski/mini.diff",
     },
     opts = function()
+      local is_mac = vim.uv.os_uname().sysname == "Darwin"
+      local default_adapter = is_mac and "copilot" or "gemini"
+
       -- default opts table which includes the history extension and gemini adapters as well as the
       -- mcp_hub def. The history extension ensures that chats that stopped working or are needed
       -- later can still be reloaded into the chat buffer.
@@ -162,7 +165,7 @@ return {
               },
               schema = {
                 model = {
-                  default = "gemini-2.5-flash-preview-05-20",
+                  default = "gemini-2.5-flash",
                 },
               },
             })
@@ -170,7 +173,7 @@ return {
         },
         strategies = {
           chat = {
-            adapter = "copilot",
+            adapter = default_adapter,
             -- custom git_files slash command adds all files tracked by git to the chat buffer and
             -- is useful if the project is not really that big or the context is big enough.
             slash_commands = {
@@ -182,10 +185,10 @@ return {
             },
           },
           inline = {
-            adapter = "copilot",
+            adapter = default_adapter,
           },
           cmd = {
-            adapter = "copilot",
+            adapter = default_adapter,
           },
         },
       }
@@ -201,7 +204,6 @@ return {
       if VECTORCODE_ENABLED then
         opts_table.extensions["vectorcode"] = vectorcode_extension
       end
-
       return opts_table
     end,
   },
