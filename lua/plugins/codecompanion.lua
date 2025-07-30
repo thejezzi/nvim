@@ -5,11 +5,32 @@ local VECTORCODE_ENABLED = false
 
 wk.add({
   { "<leader>i", group = "CodeCompanion", icon = "󱢮" },
-  { "<leader>ia", "<Cmd>CodeCompanionActions<CR>", desc = "Open action palette" },
+  { "<leader>ia", "<Cmd>CodeCompanionActions<CR>", desc = "Open action palette", mode = "n" },
   { "<leader>id", "<Cmd>CodeCompanionCmd<CR>", desc = "Generate command", mode = { "n", "v" } },
   { "<leader>ij", "<Cmd>CodeCompanion<CR>", desc = "Inline assistant", icon = "󱌿" },
   { "<leader>ii", "<Cmd>CodeCompanionChat Toggle<CR>", desc = "Toggle chat buffer", icon = "󰨙" },
-  { "<leader>ia", "<Cmd>CodeCompanionChat Add<CR>", desc = "Add to chat buffer", mode = "v" },
+  { "<leader>ib", "<Cmd>CodeCompanionChat Add<CR>", desc = "Add to chat buffer", mode = "v" },
+  {
+    "<leader>ia",
+    function()
+      -- Get visual selection range
+      local mode = vim.fn.mode()
+      if mode ~= 'v' and mode ~= 'V' and mode ~= '\22' then
+        vim.notify("No visual selection detected", vim.log.levels.WARN)
+        return
+      end
+      vim.ui.input({ prompt = "Ask CodeCompanion about selection: " }, function(input)
+        if input and input ~= "" then
+          -- Escape single quotes in input for command
+          local prompt = input:gsub("'", "''")
+          -- Run the command on the visual selection
+          vim.cmd("'<,'>CodeCompanion " .. prompt)
+        end
+      end)
+    end,
+    desc = "Ask CodeCompanion about selection",
+    mode = "v",
+  },
 })
 
 local vector_code = {
