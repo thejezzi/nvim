@@ -6,6 +6,7 @@ return {
       "nvim-lua/plenary.nvim",
       "alfaix/neotest-gtest",
       "rouge8/neotest-rust",
+      "nvim-neotest/neotest-plenary",
     },
     opts = function(_, opts)
       local wk = require("which-key")
@@ -54,6 +55,10 @@ return {
           "-coverprofile=" .. vim.fn.getcwd() .. "/coverage.out",
         },
       }
+
+      -- Add plenary/busted adapter to be able to run tests when writing neovim plugins
+      table.insert(opts.adapters, require("custom.neotest-plenary-dap"))
+      opts.run_strategy = "dap"
     end,
   },
 }
