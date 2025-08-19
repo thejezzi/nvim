@@ -77,11 +77,12 @@ end
 ---@param thismacro string|MacroFunction The value of the macro, which can be a string or a function.
 ---@return boolean, string Either ok and returns the macro or false if somehting went wrong
 local function _evaluate_macro_value(register, thismacro)
+  local ctx = _build_context()
   if type(thismacro) == "string" then
     return true, thismacro
   end
   assert(type(thismacro) == "function", "Expected the macro to be a function")
-  local ok, res = pcall(thismacro, _build_context())
+  local ok, res = pcall(thismacro, ctx)
   if not ok then
     vim.notify(
       "macro function error for @" .. tostring(register) .. ": " .. tostring(res),
