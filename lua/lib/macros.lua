@@ -4,12 +4,9 @@ local stringutil = require("lib.stringutil")
 ---@field buf number Current buffer handle
 ---@field win number Current window handle
 ---@field ft string Filetype of the current buffer
----@field mode string Current Neovim mode (e.g., 'n', 'i', 'v')
 ---@field file string Full path to the current file
 ---@field filename string Name of the current file
 ---@field dir string Current working directory
----@field lnum number Current line number (1-indexed)
----@field col number Current column number (0-indexed)
 
 --- Table type for defining macros for multiple language sets at once.
 --- Each key is a string or a table of strings (languages), and each value is a macros table.
@@ -41,13 +38,13 @@ local function _normalize_lang_definitions(langs)
   assert(#lang_patterns > 0, "Expected langs to be a non-empty string or table")
   table.sort(lang_patterns)
 
+  if lang_patterns[1] == "*" then
+    return "SpecialAllMacros", { "*" }
+  end
+
   local capitalized_names = {}
   for _, lang_name in ipairs(lang_patterns) do
-    if lang_name ~= "*" then
-      table.insert(capitalized_names, stringutil.capitilize(lang_name))
-    else
-      table.insert(capitalized_names, "All")
-    end
+    table.insert(capitalized_names, stringutil.capitilize(lang_name))
   end
   local group_suffix = table.concat(capitalized_names, "_")
   local group_name = "Special" .. group_suffix .. "Macros"
@@ -58,17 +55,13 @@ end
 --- This table can be used to pass environment details to other functions.
 ---@return MacroContext # A table containing context information.
 local function _build_context()
-  local line, col = unpack(vim.api.nvim_win_get_cursor(0))
   return {
     buf = vim.api.nvim_get_current_buf(),
     win = vim.api.nvim_get_current_win(),
     ft = vim.bo.filetype,
-    mode = vim.api.nvim_get_mode().mode,
     file = vim.fn.expand("%:p"),
     filename = vim.fn.fnamemodify(vim.fn.expand("%:p"), ":t"),
     dir = vim.fn.getcwd(),
-    lnum = line,
-    col = col,
   }
 end
 
