@@ -1,5 +1,23 @@
 local stringutil = require("lib.stringutil")
 
+---@class MacroContext
+---@field buf number Current buffer handle
+---@field win number Current window handle
+---@field ft string Filetype of the current buffer
+---@field mode string Current Neovim mode (e.g., 'n', 'i', 'v')
+---@field file string Full path to the current file
+---@field filename string Name of the current file
+---@field dir string Current working directory
+---@field lnum number Current line number (1-indexed)
+---@field col number Current column number (0-indexed)
+
+--- Table type for defining macros for multiple language sets at once.
+--- Each key is a string or a table of strings (languages), and each value is a macros table.
+---@alias MacroLangs string|string[]
+---@alias MacroTable table<string, string|MacroFunction>
+---@alias MacroLangsTable table<MacroLangs, MacroTable>
+---@alias MacroFunction fun(ctx: MacroContext) : string
+
 local M = {}
 
 ---Normalizes language definitions into a group name and a sorted list of patterns.
@@ -36,9 +54,48 @@ local function _normalize_lang_definitions(langs)
   return group_name, lang_patterns
 end
 
+--- Builds a context table containing various Neovim and file-related information.
+--- This table can be used to pass environment details to other functions.
+---@return MacroContext # A table containing context information.
+local function _build_context()
+  local line, col = unpack(vim.api.nvim_win_get_cursor(0))
+  return {
+    buf = vim.api.nvim_get_current_buf(),
+    win = vim.api.nvim_get_current_win(),
+    ft = vim.bo.filetype,
+    mode = vim.api.nvim_get_mode().mode,
+    file = vim.fn.expand("%:p"),
+    filename = vim.fn.fnamemodify(vim.fn.expand("%:p"), ":t"),
+    dir = vim.fn.getcwd(),
+    lnum = line,
+    col = col,
+  }
+end
+
+---Evaluates the value of a macro, which can be a string or a function.
+---@param register string The register name where the macro is stored (e.g., "l", "q").
+---@param thismacro string|MacroFunction The value of the macro, which can be a string or a function.
+---@return boolean, string Either ok and returns the macro or false if somehting went wrong
+local function _evaluate_macro_value(register, thismacro)
+  if type(thismacro) == "string" then
+    return true, thismacro
+  end
+  assert(type(thismacro) == "function", "Expected the macro to be a function")
+  local ok, res = pcall(thismacro, _build_context())
+  if not ok then
+    vim.notify(
+      "macro function error for @" .. tostring(register) .. ": " .. tostring(res),
+      vim.log.levels.ERROR,
+      { title = "Macros" }
+    )
+    return false, ""
+  end
+  return true, res
+end
+
 --- Registers a list of functions to be executed when a specific filetype is opened.
 ---@param langs string|string[] The filetype(s) for which to register the macros (e.g., "lua", "python", or {"lua", "python"}).
----@param macros_table table<string, string> A table where keys are register names (e.g., "l", "q") and values are the string of keys to be pressed.
+---@param macros_table MacroTable A table where keys are register names (e.g., "l", "q") and values are the string of keys to be pressed.
 function M.single_lang(langs, macros_table)
   local group_name, lang_patterns = _normalize_lang_definitions(langs)
   vim.api.nvim_create_augroup(group_name, { clear = true })
@@ -46,18 +103,15 @@ function M.single_lang(langs, macros_table)
     group = group_name,
     pattern = lang_patterns,
     callback = function()
-      for register, keys_to_press in pairs(macros_table) do
-        vim.fn.setreg(register, keys_to_press)
+      for register, val in pairs(macros_table) do
+        local ok, final_macro = _evaluate_macro_value(register, val)
+        if type(final_macro) == "string" and ok then
+          vim.fn.setreg(register, final_macro)
+        end
       end
     end,
   })
 end
-
---- Table type for defining macros for multiple language sets at once.
---- Each key is a string or a table of strings (languages), and each value is a macros table.
----@alias MacroLangs string|string[]
----@alias MacroTable table<string, string>
----@alias MacroLangsTable table<MacroLangs, MacroTable>
 
 --- Allows defining macros for multiple language sets at once.
 --- Example:
