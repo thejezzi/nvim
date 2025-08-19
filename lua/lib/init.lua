@@ -2,6 +2,8 @@ local companion_notification = require("lib.companion_notification")
 
 local M = {}
 
+M.macros = require("lib.macros")
+M.stringutil = require("lib.stringutil")
 M.companion_notification = companion_notification
 
 M.change_filetype_window = function()

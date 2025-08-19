@@ -4,5 +4,6 @@ require("config.lazy")
 require("config.commands")
 -- add mouse context entries
 require("config.mouse_context_menu")
+require("config.macros")
 -- everything else
 require("config.misc")
