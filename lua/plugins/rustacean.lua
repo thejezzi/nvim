@@ -1,4 +1,5 @@
 ---@module "rustaceanvim"
+---@module "lazyvim"
 
 local pretty_printer_path = vim.fn.stdpath("config") .. "/pretty_printer.py"
 local function load_dap_configuration(type)
