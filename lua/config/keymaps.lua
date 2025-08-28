@@ -67,11 +67,11 @@ require("which-key").add({
   { "<leader>gr", "<cmd>DiffviewRefresh<CR>", desc = "Refresh Diffview" },
   --
   -- Everyhting to open stuff
-  { "<leader>o", group = "open", icon = "󰏌" },
-  { "<leader>oa", "<cmd>Alpha<CR>", desc = "Open Alpha", icon = "󰧨" },
-  { "<leader>of", "<cmd>ToggleTerm size=20 direction=float<cr>", desc = "Floating terminal" },
-  { "<leader>ot", "<cmd>ToggleTerm size=20 direction=horizontal<cr>", desc = "Horizontal terminal" },
-  { "<leader>ov", "<cmd>ToggleTerm size=90 direction=vertical<cr>", desc = "Vertical terminal" },
+  { "<leader>O", group = "open", icon = "󰏌" },
+  { "<leader>Oa", "<cmd>Alpha<CR>", desc = "Open Alpha", icon = "󰧨" },
+  { "<leader>Of", "<cmd>ToggleTerm size=20 direction=float<cr>", desc = "Floating terminal" },
+  { "<leader>Ot", "<cmd>ToggleTerm size=20 direction=horizontal<cr>", desc = "Horizontal terminal" },
+  { "<leader>Ov", "<cmd>ToggleTerm size=90 direction=vertical<cr>", desc = "Vertical terminal" },
   --
   -- Preview extension similar to lsp saga priview
   { "<leader>p", group = "Preview", icon = "" },

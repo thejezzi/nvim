@@ -40,37 +40,48 @@ end
 ---@return table<string, function> The adapters configuration table.
 local function get_adapters()
   return {
-    ollama = function()
-      return require("codecompanion.adapters").extend("ollama", {
-        schema = {
-          model = {
-            default = "phi4",
+    http = {
+      ollama = function()
+        return require("codecompanion.adapters").extend("ollama", {
+          schema = {
+            model = {
+              default = "qwen3",
+            },
+            num_ctx = {
+              default = 20000,
+            },
           },
-          num_ctx = {
-            default = 20000,
+        })
+      end,
+      gemini = function()
+        return require("codecompanion.adapters").extend("gemini", {
+          env = {
+            api_key = "cmd: gpg --batch --quiet --decrypt ~/gemini.gpg",
           },
-        },
-      })
-    end,
-    gemini = function()
-      return require("codecompanion.adapters").extend("gemini", {
-        env = {
-          api_key = "cmd: gpg --batch --quiet --decrypt ~/gemini.gpg",
-        },
-        schema = {
-          model = {
-            default = "gemini-2.5-flash",
+          schema = {
+            model = {
+              default = "gemini-2.5-flash",
+            },
           },
-        },
-      })
-    end,
-    tavily = function()
-      return require("codecompanion.adapters").extend("tavily", {
-        env = {
-          api_key = "cmd: gpg --batch --quiet --decrypt ~/tavily.gpg",
-        },
-      })
-    end,
+        })
+      end,
+      tavily = function()
+        return require("codecompanion.adapters").extend("tavily", {
+          env = {
+            api_key = "cmd: gpg --batch --quiet --decrypt ~/tavily.gpg",
+          },
+        })
+      end,
+    },
+    acp = {
+      gemini_cli = function()
+        return require("codecompanion.adapters").extend("gemini_cli", {
+          env = {
+            api_key = "cmd: gpg --batch --quiet --decrypt ~/gemini.gpg",
+          },
+        })
+      end,
+    },
   }
 end
 
@@ -169,6 +180,7 @@ end
 ---Gathers all the configurations and returns the final options table for codecompanion.nvim.
 ---@return table The complete options table for `codecompanion.nvim`.
 local function get_opts()
+  -- vim.env.GEMINI_API_KEY = vim.fn.system("gpg --batch --quiet --decrypt ~/gemini.gpg")
   local vectorcode_enabled = vim.fn.executable("vectorcode") == 1
   return {
     log_level = "DEBUG",
