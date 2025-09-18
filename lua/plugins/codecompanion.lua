@@ -1,10 +1,12 @@
----@module "codecompanion"
----@module "lazy"
-
 local wk = require("which-key")
 
----Adds the content of all Git-tracked files to the chat buffer.
----@param chat CodeCompanion.Chat The chat buffer to add the files to.
+--- Helper function to decrypt API keys using GPG.
+--- @param filepath string The path to the GPG encrypted file.
+--- @return string The command string for API key decryption.
+local function get_decryption_cmd(filepath)
+  return "cmd: gpg --batch --quiet --decrypt " .. filepath
+end
+
 local function git_files_callback(chat)
   local handle = io.popen("git ls-files")
   if handle then
@@ -37,8 +39,11 @@ end
 
 ---Builds the adapters configuration for CodeCompanion.
 ---Each adapter is defined as a function that returns an extended adapter configuration.
+---
 ---@return table<string, function> The adapters configuration table.
 local function get_adapters()
+  local gemini_api_key_cmd = get_decryption_cmd("~/gemini.gpg")
+  local tavily_api_key_cmd = get_decryption_cmd("~/tavily.gpg")
   return {
     http = {
       ollama = function()
@@ -56,7 +61,7 @@ local function get_adapters()
       gemini = function()
         return require("codecompanion.adapters").extend("gemini", {
           env = {
-            api_key = "cmd: gpg --batch --quiet --decrypt ~/gemini.gpg",
+            api_key = gemini_api_key_cmd,
           },
           schema = {
             model = {
@@ -68,7 +73,7 @@ local function get_adapters()
       tavily = function()
         return require("codecompanion.adapters").extend("tavily", {
           env = {
-            api_key = "cmd: gpg --batch --quiet --decrypt ~/tavily.gpg",
+            api_key = tavily_api_key_cmd,
           },
         })
       end,
@@ -76,9 +81,7 @@ local function get_adapters()
     acp = {
       gemini_cli = function()
         return require("codecompanion.adapters").extend("gemini_cli", {
-          env = {
-            api_key = "cmd: gpg --batch --quiet --decrypt ~/gemini.gpg",
-          },
+          env = { api_key = gemini_api_key_cmd },
         })
       end,
     },
@@ -177,9 +180,9 @@ end
 -- later can still be reloaded into the chat buffer.
 -- The MCP Protocol gives us the ability to let the llm do anything we want and the mcp hub is
 -- a nice way to install mcp servers from the hub without doing the configuration ourselves.
----Gathers all the configurations and returns the final options table for codecompanion.nvim.
+---
 ---@return table The complete options table for `codecompanion.nvim`.
-local function get_opts()
+local function opts()
   -- vim.env.GEMINI_API_KEY = vim.fn.system("gpg --batch --quiet --decrypt ~/gemini.gpg")
   local vectorcode_enabled = vim.fn.executable("vectorcode") == 1
   return {
@@ -188,6 +191,39 @@ local function get_opts()
     strategies = get_strategies(),
     extensions = get_extensions_config(vectorcode_enabled),
   }
+end
+
+---
+local function setup_codecompanion_keymaps()
+  wk.add({
+    { "<leader>i", group = "CodeCompanion", icon = "󱢮" },
+    { "<leader>ic", "<Cmd>CodeCompanionActions<CR>", desc = "Open action palette", mode = "n" }, -- Changed from <leader>ia
+    { "<leader>id", "<Cmd>CodeCompanionCmd<CR>", desc = "Generate command", mode = { "n", "v" } },
+    { "<leader>ij", "<Cmd>CodeCompanion<CR>", desc = "Inline assistant", icon = "󱌿" },
+    { "<leader>ii", "<Cmd>CodeCompanionChat Toggle<CR>", desc = "Toggle chat buffer", icon = "󰨙" },
+    { "<leader>ib", "<Cmd>CodeCompanionChat Add<CR>", desc = "Add to chat buffer", mode = "v" },
+    {
+      "<leader>ia", -- This now specifically handles visual selection prompting
+      function()
+        -- Get visual selection range
+        local mode = vim.fn.mode()
+        if mode ~= "v" and mode ~= "V" and mode ~= "\22" then
+          vim.notify("No visual selection detected", vim.log.levels.WARN)
+          return
+        end
+        vim.ui.input({ prompt = "Ask CodeCompanion about selection: " }, function(input)
+          if input and input ~= "" then
+            -- Escape single quotes in input for command
+            local prompt = input:gsub("'", "''")
+            -- Run the command on the visual selection
+            vim.cmd("'<,'>CodeCompanion " .. prompt)
+          end
+        end)
+      end,
+      desc = "Ask CodeCompanion about selection",
+      mode = "v",
+    },
+  })
 end
 
 return {
@@ -211,8 +247,6 @@ return {
     dependencies = { "nvim-lua/plenary.nvim" },
   },
   {
-    --- TODO: This fork is just a temporary fix for tool calling with gemini and should be replaced
-    --- with the original repository once the PR #1628 is merged
     "olimorris/codecompanion.nvim",
     dependencies = {
       "ravitemer/codecompanion-history.nvim",
@@ -221,39 +255,10 @@ return {
       "nvim-treesitter/nvim-treesitter",
       "nvim-mini/mini.diff",
     },
-    opts = get_opts,
-    ---@param opts table The options table returned by `get_opts`.
-    config = function(_, opts)
-      require("codecompanion").setup(opts)
-      wk.add({
-        { "<leader>i", group = "CodeCompanion", icon = "󱢮" },
-        { "<leader>ia", "<Cmd>CodeCompanionActions<CR>", desc = "Open action palette", mode = "n" },
-        { "<leader>id", "<Cmd>CodeCompanionCmd<CR>", desc = "Generate command", mode = { "n", "v" } },
-        { "<leader>ij", "<Cmd>CodeCompanion<CR>", desc = "Inline assistant", icon = "󱌿" },
-        { "<leader>ii", "<Cmd>CodeCompanionChat Toggle<CR>", desc = "Toggle chat buffer", icon = "󰨙" },
-        { "<leader>ib", "<Cmd>CodeCompanionChat Add<CR>", desc = "Add to chat buffer", mode = "v" },
-        {
-          "<leader>ia",
-          function()
-            -- Get visual selection range
-            local mode = vim.fn.mode()
-            if mode ~= "v" and mode ~= "V" and mode ~= "\22" then
-              vim.notify("No visual selection detected", vim.log.levels.WARN)
-              return
-            end
-            vim.ui.input({ prompt = "Ask CodeCompanion about selection: " }, function(input)
-              if input and input ~= "" then
-                -- Escape single quotes in input for command
-                local prompt = input:gsub("'", "''")
-                -- Run the command on the visual selection
-                vim.cmd("'<,'>CodeCompanion " .. prompt)
-              end
-            end)
-          end,
-          desc = "Ask CodeCompanion about selection",
-          mode = "v",
-        },
-      })
+    opts = opts,
+    config = function(_, o)
+      require("codecompanion").setup(o)
+      setup_codecompanion_keymaps()
     end,
   },
 }
