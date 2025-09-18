@@ -55,10 +55,6 @@ return {
           "-coverprofile=" .. vim.fn.getcwd() .. "/coverage.out",
         },
       }
-
-      -- Add plenary/busted adapter to be able to run tests when writing neovim plugins
-      table.insert(opts.adapters, require("custom.neotest-plenary-dap"))
-      opts.run_strategy = "dap"
     end,
   },
 }

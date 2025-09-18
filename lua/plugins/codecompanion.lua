@@ -219,7 +219,7 @@ return {
       "j-hui/fidget.nvim",
       "nvim-lua/plenary.nvim",
       "nvim-treesitter/nvim-treesitter",
-      "echasnovski/mini.diff",
+      "nvim-mini/mini.diff",
     },
     opts = get_opts,
     ---@param opts table The options table returned by `get_opts`.

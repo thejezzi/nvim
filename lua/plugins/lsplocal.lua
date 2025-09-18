@@ -1,0 +1,3 @@
+return {
+  "thejezzi/lsplocal.nvim",
+}
