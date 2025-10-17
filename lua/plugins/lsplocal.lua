@@ -1,3 +1,1 @@
-return {
-  "thejezzi/lsplocal.nvim",
-}
+return { "thejezzi/lsplocal.nvim" }
