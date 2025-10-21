@@ -1,7 +1,19 @@
+---@module "snacks"
 ---@type fun(): snacks.Config
 local buildOpts = function()
   ---@type snacks.Config
-  local default = {}
+  local default = {
+    picker = {
+      sources = {
+        explorer = {
+          hidden = true,
+        },
+        files = {
+          hidden = true,
+        },
+      },
+    },
+  }
 
   if vim.fn.executable("delta") == 1 then
     default["lazygit"] = {
