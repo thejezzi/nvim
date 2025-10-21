@@ -1,7 +1,9 @@
-return {
-  {
-    "zbirenbaum/copilot.lua",
-    cmd = "Copilot",
-    enabled = true,
-  },
-}
+return {}
+
+-- return {
+--   {
+--     "zbirenbaum/copilot.lua",
+--     cmd = "Copilot",
+--     enabled = false,
+--   },
+-- }
