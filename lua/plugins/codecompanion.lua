@@ -106,6 +106,14 @@ local function get_strategies()
           opts = { contains_code = true },
         },
       },
+      tools = {
+        opts = {
+          default_tools = {
+            "full_stack_dev",
+            "read_file",
+          },
+        },
+      },
     },
     inline = {
       adapter = default_adapter,
@@ -175,6 +183,23 @@ local function get_extensions_config(vectorcode_enabled)
   return config
 end
 
+-- display returns display configuration for codecompanion like which diff tool to use and how big
+-- the chat windows should be.
+--- @return table The display configuration table.
+local function display()
+  -- local providers = require("codecompanion.providers")
+  return {
+    diff = {
+      provider = "mini_diff", -- providers.diff,
+      provider_opts = {
+        inline = {
+          layout = "buffer",
+        },
+      },
+    },
+  }
+end
+
 -- default opts table which includes the history extension and gemini adapters as well as the
 -- mcp_hub def. The history extension ensures that chats that stopped working or are needed
 -- later can still be reloaded into the chat buffer.
@@ -190,6 +215,7 @@ local function opts()
     adapters = get_adapters(),
     strategies = get_strategies(),
     extensions = get_extensions_config(vectorcode_enabled),
+    display = display(),
   }
 end
 

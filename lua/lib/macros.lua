@@ -99,7 +99,7 @@ function M.single_lang(langs, macros_table)
     callback = function()
       for register, val in pairs(macros_table) do
         local ok, final_macro = _evaluate_macro_value(register, val)
-        if type(final_macro) == "string" and ok then
+        if ok and type(final_macro) == "string" then
           vim.fn.setreg(register, final_macro)
         end
       end
