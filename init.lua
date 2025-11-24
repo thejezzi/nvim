@@ -7,3 +7,5 @@ require("config.mouse_context_menu")
 require("config.macros")
 -- everything else
 require("config.misc")
+
+vim.cmd("Copilot disable")

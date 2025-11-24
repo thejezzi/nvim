@@ -11,6 +11,9 @@ local buildOpts = function()
         files = {
           hidden = true,
         },
+        grep = {
+          hidden = true,
+        },
       },
     },
   }

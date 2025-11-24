@@ -81,7 +81,12 @@ local function get_adapters()
     acp = {
       gemini_cli = function()
         return require("codecompanion.adapters").extend("gemini_cli", {
-          env = { api_key = gemini_api_key_cmd },
+          defaults = {
+            auth_method = "gemini-api-key", -- "oauth-personal"|"gemini-api-key"|"vertex-ai"
+          },
+          env = {
+            GEMINI_API_KEY = gemini_api_key_cmd,
+          },
         })
       end,
     },
