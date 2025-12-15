@@ -49,6 +49,7 @@ return {
       table.insert(opts.adapters, patched_rust_adapter)
       table.insert(opts.adapters, "neotest-gtest")
       opts.adapters["neotest-golang"] = {
+        warn_test_name_dupes = false,
         go_test_args = {
           "-v",
           "-race",
