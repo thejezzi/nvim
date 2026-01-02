@@ -279,7 +279,6 @@ return {
   },
   {
     "olimorris/codecompanion.nvim",
-    commit = "v17.33.0",
     dependencies = {
       "ravitemer/codecompanion-history.nvim",
       "j-hui/fidget.nvim",
