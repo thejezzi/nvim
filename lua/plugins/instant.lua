@@ -1,3 +1,4 @@
+---@module "nvim"
 return {
   {
     "jbyuki/instant.nvim",

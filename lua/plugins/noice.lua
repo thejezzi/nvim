@@ -1,3 +1,4 @@
+---@module "noice"
 return {
   {
     "folke/noice.nvim",
@@ -23,7 +24,6 @@ return {
           opts = { skip = true },
         },
       },
-
     },
   },
 }
