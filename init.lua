@@ -8,4 +8,4 @@ require("config.macros")
 -- everything else
 require("config.misc")
 
-vim.cmd("Copilot disable")
+-- vim.cmd("Copilot disable")
