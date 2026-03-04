@@ -45,7 +45,6 @@ local function map_multiple(mappings)
 end
 
 map_multiple({
-  { "n", "gh", "<cmd>lua vim.lsp.buf.hover()<cr>", "LSP Hover" },
   { "t", "<Esc>", "<C-\\><C-n>" },
 })
 
