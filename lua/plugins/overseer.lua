@@ -11,6 +11,7 @@ wk.add({
 
 return {
   "stevearc/overseer.nvim",
+  lazy = true,
   ---@type overseer.Config
   opts = {
     task_list = {

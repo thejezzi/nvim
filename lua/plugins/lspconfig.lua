@@ -7,6 +7,9 @@ return {
         enabled = false,
       },
       servers = {
+        jsonls = {
+          filetypes = { "json", "jsonc", "json5" },
+        },
         -- NOTE: We comment this because it would trigger mason to install
         -- the rust_analyzer which is already done by rustacean.nvim
         -- rust_analyzer = {
