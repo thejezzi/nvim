@@ -45,6 +45,7 @@ return {
   opts = function()
     ---@type rustaceanvim.Opts
     return {
+      --- @type rustaceanvim.lsp.ClientOpts
       server = {
         on_attach = function(_, bufnr)
           vim.keymap.set("n", "<leader>cR", function()
@@ -98,6 +99,18 @@ return {
                 "target",
                 "venv",
                 ".venv",
+              },
+            },
+            semanticHighlighting = {
+              comments = {
+                enable = true,
+              },
+              doc = {
+                comment = {
+                  inject = {
+                    enable = false,
+                  },
+                },
               },
             },
           },
