@@ -3,6 +3,9 @@
 local buildOpts = function()
   ---@type snacks.Config
   local default = {
+    -- dashboard = {
+    --   enabled = false,
+    -- },
     picker = {
       sources = {
         explorer = {

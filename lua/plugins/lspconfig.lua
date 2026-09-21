@@ -7,6 +7,13 @@ return {
         enabled = false,
       },
       servers = {
+        amber_lsp = {
+          mason = false,
+          cmd = { "amber-lsp" },
+          filetypes = { "amber" },
+          single_file_support = true,
+          root_dir = require("lspconfig.util").root_pattern("amber.toml", ".git"),
+        },
         jsonls = {
           filetypes = { "json", "jsonc", "json5" },
         },
@@ -71,6 +78,24 @@ return {
       },
       ---@type table<string, fun(server:string, opts:_.lspconfig.options):boolean?>
       setup = {
+        amber_lsp = function(_, opts)
+          local lspconfig = require("lspconfig")
+          local configs = require("lspconfig.configs")
+
+          if not configs.amber_lsp then
+            configs.amber_lsp = {
+              default_config = {
+                cmd = { "amber-lsp" },
+                filetypes = { "amber" },
+                single_file_support = true,
+                root_dir = require("lspconfig.util").root_pattern("amber.toml", ".git"),
+              },
+            }
+          end
+
+          lspconfig.amber_lsp.setup(opts)
+          return true
+        end,
         gopls = function(_, opts)
           -- workaround for gopls not supporting semanticTokensProvider
           -- https://github.com/golang/go/issues/54531#issuecomment-1464982242

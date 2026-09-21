@@ -73,6 +73,7 @@ local house = [[
 
 return {
   "nvimdev/dashboard-nvim",
+  enabled = false,
   opts = function(_, _)
     local function randomAsciiArt()
       math.randomseed(os.time())
