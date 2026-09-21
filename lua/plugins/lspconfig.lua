@@ -7,6 +7,13 @@ return {
         enabled = false,
       },
       servers = {
+        sqls = {
+          cmd = {
+            "sqls",
+            "-config",
+            vim.fn.expand("~/.config/sqls/config.yml"),
+          },
+        },
         amber_lsp = {
           mason = false,
           cmd = { "amber-lsp" },
@@ -17,22 +24,6 @@ return {
         jsonls = {
           filetypes = { "json", "jsonc", "json5" },
         },
-        -- NOTE: We comment this because it would trigger mason to install
-        -- the rust_analyzer which is already done by rustacean.nvim
-        -- rust_analyzer = {
-        --   settings = {
-        --     ["rust-analyzer"] = {
-        --       procMacro = {
-        --         ignored = {
-        --           leptos_macro = {
-        --             "component",
-        --             "server",
-        --           },
-        --         },
-        --       },
-        --     },
-        --   },
-        -- },
         gopls = {
           keys = {
             -- Workaround for the lack of a DAP strategy in neotest-go: https://github.com/nvim-neotest/neotest-go/issues/12

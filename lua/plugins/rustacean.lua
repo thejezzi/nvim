@@ -10,6 +10,7 @@ local function load_dap_configuration(type)
     type = type,
     request = "launch",
     stopOnEntry = false,
+    sourceLanguages = type == "codelldb" and { "rust" } or nil,
     initCommands = {
       "command script import " .. pretty_printer_path,
     },
@@ -65,8 +66,10 @@ return {
                 enable = true,
               },
             },
-            -- Add clippy lints for Rust.
-            checkOnSave = {
+            -- Add clippy lints for Rust. `checkOnSave` is a boolean in current
+            -- rust-analyzer; command options live in the separate `check` table.
+            checkOnSave = true,
+            check = {
               allFeatures = true,
               command = "clippy",
               extraArgs = { "--no-deps" },
@@ -120,7 +123,9 @@ return {
   end,
   config = function(_, opts)
     if LazyVim.has("mason.nvim") then
-      local package_path = vim.fn.exepath("codelldb")
+      local registry = require("mason-registry")
+      local pkg = registry.get_package("codelldb")
+      local package_path = pkg:get_install_path()
       local codelldb = package_path .. "/extension/adapter/codelldb"
       local library_path = package_path .. "/extension/lldb/lib/liblldb.dylib"
       local uname = io.popen("uname"):read("*l")

@@ -5,6 +5,7 @@ return {
     "allaman/emoji.nvim",
     "hrsh7th/cmp-calc",
     "chrisgrieser/cmp-nerdfont",
+    "kristijanhusak/vim-dadbod-completion",
   },
   opts = {
     -- completion = {
@@ -24,7 +25,7 @@ return {
       ["<S-Tab>"] = { "snippet_backward", "fallback" },
     },
     sources = {
-      default = { "nerdfont", "emoji", "lazydev", "calc", "path", "snippets" },
+      default = { "nerdfont", "dadbod", "emoji", "lazydev", "calc", "path", "snippets" },
       per_filetype = {
         codecompanion = { "codecompanion" },
       },
@@ -55,6 +56,10 @@ return {
           name = "LazyDev",
           module = "lazydev.integrations.blink",
           score_offset = 100, -- show at a higher priority than lsp
+        },
+        dadbod = {
+          name = "Dadbod",
+          module = "vim_dadbod_completion.blink",
         },
       },
     },
